@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Twisted",
+    "slug": "Twisted",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "jsEngine": "jsc"
+    },
+    "android": {
+      "package": "com.twisted.Twisted",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "experimental": {
+      "router": true
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
+  }
+}
