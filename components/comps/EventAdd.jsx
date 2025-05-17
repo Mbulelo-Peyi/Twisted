@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
-import { KeyboardAvoidingView, TextInput, TouchableOpacity, View, Text, Pressable } from 'react-native';
+import { KeyboardAvoidingView, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { parseDateTimeForDRF } from '../../utils/dateTime';
@@ -9,8 +9,8 @@ import { parseDateTimeForDRF } from '../../utils/dateTime';
 
 const EventAdd = ({ data, create, remove, update }) => {
     const [date, setDate] = useState(new Date());
-    const [showPicker, setShowPicker] = useState(false);
-    const [formattedDate, setFormattedDate] = useState("");
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [formattedDate, setFormattedDate] = useState('');
     const initialValues = { 
         title: data?data?.title:'', 
         description: data?data?.description:'', 
@@ -39,7 +39,8 @@ const EventAdd = ({ data, create, remove, update }) => {
         event.title = values.title;
         event.description = values.description;
         event.venue = values.venue;
-        event.date = formattedDate;
+        event.date = formattedDate?formattedDate:values.venue;
+        alert(event)
         data?update?.mutate(event):create?.mutate(event)
         setSubmitting(false);
     }
@@ -47,22 +48,19 @@ const EventAdd = ({ data, create, remove, update }) => {
         handleSubmit(values, setSubmitting)
     };
 
-    const resetDate = () =>{
-        setFormattedDate("")
-    };
-
-    const onChange = (event, selectedDate) => {
+    const onDateChange = (nativeEvent, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShowPicker(Platform.OS === 'ios'); // Keep picker open on iOS, close on Android
+        // setShowDatePicker(Platform.OS === 'ios'); // Keep picker open on iOS, close on Android
+        setShowDatePicker(false);
         setDate(currentDate);
-    
-        // Parse the selected date for DRF
+        
+        // Parse for DateField
         const parsedDate = parseDateTimeForDRF(currentDate);
         setFormattedDate(parsedDate || 'Invalid date');
     };
-    
-    const showDateTimePicker = () => {
-    setShowPicker(true);
+            
+    const showDate = () => {
+        setShowDatePicker(prev=>!prev);
     };
 
     return (
@@ -159,40 +157,38 @@ const EventAdd = ({ data, create, remove, update }) => {
                     </View>
                     <View>
                         <View className="flex justify-between flex-row">
-                        <Text className="block text-sm mb-2 dark:text-white">Date</Text>
-                        {formattedDate && (
-                            <Pressable onPress={resetDate}><Ionicons name="close-circle-outline" color={"red"} size={16}/></Pressable>
-                        )}
+                            <Text className="block text-sm mb-2 dark:text-white">Date</Text>
                         </View>
                         <View className="relative">
                         <TouchableOpacity 
                         className="py-3 px-4 block w-full border text-center border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                        onPress={showDateTimePicker}>
+                        onPress={showDate}>
                             <Text>{formattedDate}</Text>
                         </TouchableOpacity>
-                        {showPicker && (
+                        {showDatePicker && (
                             <DateTimePicker
                             value={date}
-                            mode="datetime"
-                            is24Hour={true}
-                            minimumDate={new Date()}
+                            mode="date"
                             display="default"
-                            onChange={onChange}
+                            onChange={onDateChange}
                             />
                         )}
                         </View>
-                        {errors.date && touched.date && (
-                        <Text className="text-xs text-red-600 mt-2">{errors.date}</Text>
+                        {errors.birthday && touched.birthday && (
+                            <Text className="text-xs text-red-600 mt-2">{errors.birthday}</Text>
                         )}
                     </View>
                     {data ? (
                         <View className="flex flex-row space-x-2">
-                            <TouchableOpacity className="w-1/2 py-3 px-4 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-green-600 disabled:opacity-50 disabled:pointer-events-none"
+                            <TouchableOpacity 
+                            className="w-1/2 py-3 px-4 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-green-600 disabled:opacity-50 disabled:pointer-events-none"
                             disabled={isSubmitting||update?.isPending||remove?.isPending}
-                            ><Text className="text-white text-sm font-semibold">Create event</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={()=>remove?.mutate()} className="w-1/2 py-3 px-4 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
+                            ><Text className="text-white text-sm font-semibold">Update event</Text></TouchableOpacity>
+                            <TouchableOpacity 
+                            onPress={()=>remove?.mutate()} 
+                            className="w-1/2 py-3 px-4 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
                             disabled={isSubmitting||update?.isPending||remove?.isPending}
-                            ><Text className="text-white text-sm font-semibold">Create event</Text></TouchableOpacity>
+                            ><Text className="text-white text-sm font-semibold">De event</Text></TouchableOpacity>
                         </View>
                     ):(
                         <TouchableOpacity className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"

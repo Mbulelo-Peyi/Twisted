@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { parseDateForDRF } from '../../utils/dateTime';
 
 
 const validationSchema = Yup.object().shape({
@@ -17,9 +19,8 @@ const validationSchema = Yup.object().shape({
 
 const ProfileEdit = ({ data, update }) => {
     const [date, setDate] = useState(new Date());
-    const [show, setShow] = useState(false);
-    const date_ref = useRef(null);
-    const selected_date_ref = useRef(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [formattedDate, setFormattedDate] = useState('');
 
     const initialValues = { 
         email: data?data?.email:'', 
@@ -53,7 +54,7 @@ const ProfileEdit = ({ data, update }) => {
         user.username = values.username;
         user.bio = values.bio;
         user.password = values.password1;
-        user.birthday = formatDateTime(date_ref.current);
+        user.birthday = formattedDate;
         user.sex = values.sex;
         update?.mutate(user)
         setSubmitting(false);
@@ -62,34 +63,19 @@ const ProfileEdit = ({ data, update }) => {
         handleSubmit(values, setSubmitting)
     }
 
-    const onChange = (event, selectedDate) => {
-        if (!date_ref.current) {
-            changeDate(selectedDate)
-        } 
-    };
-
-    const changeDate = (selectedDate) =>{
-        date_ref.current = selectedDate;
+    const onDateChange = (nativeEvent, selectedDate) => {
         const currentDate = selectedDate || date;
-        setDate(selectedDate);
-        selected_date_ref.current = true;
-        alert(currentDate)
-        setShow(prev=>!prev);
+        // setShowDatePicker(Platform.OS === 'ios'); // Keep picker open on iOS, close on Android
+        setShowDatePicker(false);
+        setDate(currentDate);
+        
+        // Parse for DateField
+        const parsedDate = parseDateForDRF(currentDate);
+        setFormattedDate(parsedDate || 'Invalid date');
     };
-    const resetDate = () =>{
-        date_ref.current = null;
-        alert(date_ref.current)
-    }
-
-    const showDatepicker = () => {
-        setShow(prev=>!prev);
-    };
-
-    const formatDateTime = (date) => {
-        const year = date?date?.getFullYear():null;
-        const month = date?String(date?.getMonth() + 1).padStart(2, '0'):null;
-        const day = date?String(date?.getDate()).padStart(2, '0'):null;
-        return !date?null:`${year}-${month}-${day}`;
+        
+    const showDate = () => {
+        setShowDatePicker(prev=>!prev);
     };
 
     return (
@@ -164,6 +150,7 @@ const ProfileEdit = ({ data, update }) => {
                             className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" 
                             inputMode="text" 
                             maxLength={100} 
+                            multiline={true}
                             onChangeText={handleChange("bio")}
                             onBlur={handleBlur("bio")}
                             value={values.bio}
@@ -181,24 +168,19 @@ const ProfileEdit = ({ data, update }) => {
                     <View>
                         <View className="flex justify-between flex-row">
                             <Text className="block text-sm mb-2 dark:text-white">Birthday</Text>
-                            {date_ref.current && (
-                                <TouchableOpacity onPress={resetDate}><Ionicons name="close-circle-outline" color={"red"} size={16}/></TouchableOpacity>
-                            )}
                         </View>
                         <View className="relative">
                         <TouchableOpacity 
                         className="py-3 px-4 block w-full border text-center border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                        onPress={showDatepicker}>
-                            <Text>{!date_ref.current?"Select birthday":formatDateTime(date_ref.current)}</Text>
+                        onPress={showDate}>
+                            <Text>{formattedDate}</Text>
                         </TouchableOpacity>
-                        {show && (
+                        {showDatePicker && (
                             <DateTimePicker
-                            testID="dateTimePicker"
-                            value={!date_ref.current?date:date_ref.current}
+                            value={date}
                             mode="date"
-                            is24Hour={true}
                             display="default"
-                            onChange={onChange}
+                            onChange={onDateChange}
                             />
                         )}
                         </View>

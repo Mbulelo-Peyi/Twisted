@@ -5,7 +5,7 @@ import axios from 'axios';
 import FaqCard from './FaqCard';
 
 const Faq = () => {
-    const BASE_URL = "http://192.168.219.1:8000";
+    const BASE_URL = "http://192.168.8.101:8000";
     
 
     const {

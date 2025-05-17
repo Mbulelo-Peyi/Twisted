@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
   ProfileEdit,
   AuthContext,
 } from '../../components/comps';
-import { useAxios } from '../../features/index';
+import { useAxios } from '../../features';
 import {
   useQuery,
   useMutation,
@@ -282,7 +282,7 @@ const Profile = () => {
     <View className="flex-1 bg-blue-50">
       {!userQuery.error ? (
         <React.Fragment>
-            {/* Cover Photo */}
+          {/* Cover Photo */}
           <View 
           className="relative"
           style={{height:SCREEN_HEIGHT * 0.2}}

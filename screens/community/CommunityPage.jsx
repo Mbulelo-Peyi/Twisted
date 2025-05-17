@@ -98,43 +98,7 @@ const Community = () => {
 
     return (
         <SafeAreaView className="bg-gray-100 min-h-screen">
-            {/* Community Header */}
-            <CommunityHeader community_id={community_id} />
-
-            {/* Join Button */}
-            <View className="flex justify-center items-center w-1/2 px-4 mt-4">
-                <TouchableOpacity className="bg-blue-600 px-6 py-2 rounded-lg">
-                    <Text className="text-white">Join Community</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View className="flex flex-row justify-center items-center py-4 w-full space-x-4">
-                <TouchableOpacity
-                onPress={()=>navigation.navigate("community-members",{community_id:community_id})} 
-                className={`w-1/4 text-center`} 
-                >
-                    <Text className={`text-lg font-semibold leading-none`}>members</Text>
-                    <View className={`w-full h-1 py-1`}/>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={()=>navigation.navigate("community-rules",{community_id:community_id})} 
-                className={`w-1/4 text-center`} 
-                >
-                    <Text className={`text-lg font-semibold leading-none`}>rules</Text>
-                    <View className={`w-full h-1 py-1`}/>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={()=>navigation.navigate("events",{community_id:community_id})} 
-                className={`w-1/4 text-center`} 
-                >
-                    <Text className={`text-lg font-semibold leading-none`}>events</Text>
-                    <View className={`w-full h-1 py-1`}/>
-                </TouchableOpacity>
-            </View>
-
-            {!roleQuery.isLoading && roleQuery.data?.role==="Moderator" || roleQuery.data?.role==="Admin" &&(
-                <PostForm author_content_type={"community"} author_object_id={communityQuery.data?.id} />
-            )}
+            
             
             {/* Display Posts */}
             <PostList 
@@ -143,6 +107,47 @@ const Community = () => {
             hasNextPage={hasNextPage} 
             isFetchingNextPage={isFetchingNextPage} 
             isLoading={isLoading} 
+            ListHeaderComponent={
+            <React.Fragment>
+                {/* Community Header */}
+                <CommunityHeader community_id={community_id} />
+
+                {/* Join Button */}
+                <View className="flex justify-center items-center w-1/2 px-4 mt-4">
+                    <TouchableOpacity className="bg-blue-600 px-6 py-2 rounded-lg">
+                        <Text className="text-white">Join Community</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View className="flex flex-row justify-center items-center py-4 w-full space-x-4">
+                    <TouchableOpacity
+                    onPress={()=>navigation.navigate("community-members",{community_id:community_id})} 
+                    className={`w-1/4 text-center`} 
+                    >
+                        <Text className={`text-lg font-semibold leading-none`}>members</Text>
+                        <View className={`w-full h-1 py-1`}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    onPress={()=>navigation.navigate("community-rules",{community_id:community_id})} 
+                    className={`w-1/4 text-center`} 
+                    >
+                        <Text className={`text-lg font-semibold leading-none`}>rules</Text>
+                        <View className={`w-full h-1 py-1`}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    onPress={()=>navigation.navigate("events",{community_id:community_id})} 
+                    className={`w-1/4 text-center`} 
+                    >
+                        <Text className={`text-lg font-semibold leading-none`}>events</Text>
+                        <View className={`w-full h-1 py-1`}/>
+                    </TouchableOpacity>
+                </View>
+
+                {!roleQuery.isLoading && roleQuery.data?.role==="Moderator" || roleQuery.data?.role==="Admin" &&(
+                    <PostForm author_content_type={"community"} author_object_id={communityQuery.data?.id} />
+                )}
+            </React.Fragment>
+            }
             />
 
         </SafeAreaView>

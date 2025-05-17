@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
 const AuthContext = createContext();
-const baseURL = "http://192.168.219.1:8000";
+const baseURL = "http://192.168.8.101:8000";
 
 export default AuthContext;
 
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       if (loading) {
         setLoading(false);
-        // navigation.navigate('AuthPath', { screen: 'Login' });
+        navigation.navigate('AuthPath', { screen: 'Login' });
       }
     }
   };
@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
         const newTokens = response.data;
         setAuthTokens(newTokens);
         setUser(jwtDecode(newTokens.access));
-        await storeTokens(newTokens); // Fixed: Correctly store tokens
+        await storeTokens(newTokens); 
         console.log('Tokens updated:', newTokens);
       } else {
         throw new Error('Update failed');

@@ -6,7 +6,7 @@ import AuthContext from '../context/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 
 
-const baseURL = "http://192.168.219.1:8000";
+const baseURL = "http://192.168.8.101:8000";
 
 const useAxios = () =>{
     let {user, setUser, authTokens, setAuthTokens} = useContext(AuthContext);
@@ -22,9 +22,6 @@ const useAxios = () =>{
             }
         };
         setUser(jwtDecode(authTokens?.access))
-        // let isExpired = dayjs.unix(user?.exp).diff(dayjs()) < 1;
-        // if(!isExpired) return req
-        // const decoded = jwtDecode(tokens.access);
         let isExpired = dayjs().isAfter(dayjs.unix(user?.exp));
         if(!isExpired) return req;
     

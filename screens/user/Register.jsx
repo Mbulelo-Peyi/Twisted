@@ -1,19 +1,19 @@
-import React,{ useContext, Fragment, useState, useRef } from 'react';
+import React,{ useContext, Fragment, useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import axios from "axios";
-import { UsedEmails, CommonPasswords, RNModal, useToast, AuthContext } from './index';
+import { UsedEmails, CommonPasswords, RNModal, useToast, AuthContext } from '.';
 import { useMutation } from '@tanstack/react-query';
 import { Text, TextInput, View, SafeAreaView, TouchableOpacity, ScrollView, Pressable, KeyboardAvoidingView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { parseDateForDRF } from '../../utils/dateTime';
 
 
 const Register = () => {
     const toast = useToast();
     const { user, userPasswordStrength, userPasswordNumeric } = useContext(AuthContext);
-    const [showTerms, setShowTerms] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [weakPasswordResponse, setWeakPasswordResponse] = useState(false);
     const [numericPasswordResponse, setNumericPasswordResponse] = useState(false);
@@ -21,8 +21,11 @@ const Register = () => {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [formattedDate, setFormattedDate] = useState('');
-    const date_ref = useRef(null)
     const navigation = useNavigation();
+
+    useEffect(()=>{
+        if (user) navigation.navigate("Home");
+    },[])
 
     const userMutation = useMutation({
         mutationFn: (variables)=> handleRegister(variables),
@@ -31,36 +34,26 @@ const Register = () => {
         },
     });
 
-    const Terms = ()=>{
-        setShowTerms((prev)=>!prev)
-    };
-
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
     const initialValues = { email: '', username:'', password1:'', password2:'', birthday:'', sex:''};
 
-    const resetDate = () =>{
-        date_ref.current = null;
-        alert(date_ref.current)
-    };
 
-    const onDateChange = (selectedDate,birthday) => {
+    const onDateChange = (nativeEvent, selectedDate) => {
         const currentDate = selectedDate || date;
         // setShowDatePicker(Platform.OS === 'ios'); // Keep picker open on iOS, close on Android
+        setShowDatePicker(false);
         setDate(currentDate);
-    
+        
         // Parse for DateField
         const parsedDate = parseDateForDRF(currentDate);
         setFormattedDate(parsedDate || 'Invalid date');
-        birthday = formattedDate;
-        // showDate()
-        console.log(formattedDate)
     };
     
     const showDate = () => {
-    setShowDatePicker(prev=>!prev);
+        setShowDatePicker(prev=>!prev);
     };
 
     const validate = (values) => {
@@ -90,11 +83,11 @@ const Register = () => {
             errors.password2 = 'Required';
         }
         if (!values.birthday) {
-        if(!date_ref.current){
+        if(formattedDate.trim() === ""){
             errors.birthday = 'Required';
         }
-        if(date_ref.current !== null){
-            values.birthday = formatDateTime(date_ref.current);
+        if(formattedDate.trim() !== ""){
+            values.birthday = formattedDate;
         }
         }
         if (!values.sex) {
@@ -126,7 +119,7 @@ const Register = () => {
         };
         try {
             const response = await axios.post(
-                "http://192.168.219.1:8000/api/profile/",
+                "http://192.168.8.101:8000/api/profile/",
                 data,
                 config
             )
@@ -142,10 +135,9 @@ const Register = () => {
         data.email = values.email.toLowerCase();
         data.username = values.username;
         data.password = values.password1;
-        data.birthday = formatDateTime(date_ref.current);
+        data.birthday = formattedDate;
         data.sex = values.sex;
-        userMutation.mutate(data);
-        alert(JSON.stringify(data,null,2));
+        userMutation.mutate(JSON.stringify(data, null, 2));
         setSubmitting(false);
     };
 
@@ -252,9 +244,6 @@ const Register = () => {
                             <View>
                                 <View className="flex justify-between flex-row">
                                 <Text className="block text-sm mb-2 dark:text-white">Birthday</Text>
-                                {formattedDate.trim() !== "" && (
-                                    <Pressable onPress={resetDate}><Ionicons name="close-circle-outline" color={"red"} size={16}/></Pressable>
-                                )}
                                 </View>
                                 <View className="relative">
                                 <TouchableOpacity 
@@ -267,12 +256,12 @@ const Register = () => {
                                     value={date}
                                     mode="date"
                                     display="default"
-                                    onChange={()=>onDateChange(e.values.birthday)}
+                                    onChange={onDateChange}
                                     />
                                 )}
                                 </View>
                                 {errors.birthday && touched.birthday && (
-                                <Text className="text-xs text-red-600 mt-2">{errors.birthday}</Text>
+                                    <Text className="text-xs text-red-600 mt-2">{errors.birthday}</Text>
                                 )}
                             </View>
                             <View>

@@ -80,7 +80,7 @@ const CommentOptions = ({ comment }) => {
     return (
         <React.Fragment>
             {user?.id === comment?.user?.id ? (
-                <View className="flex justify-between items-center z-10">
+                <View className="flex flex-row justify-between items-center z-10">
                     {edit ? (
                         <KeyboardAvoidingView className="mt-2">
                             <TextInput

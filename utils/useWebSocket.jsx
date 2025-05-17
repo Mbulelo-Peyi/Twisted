@@ -8,7 +8,7 @@ const useWebSocket = (roomId, username) => {
     useEffect(() => {
         if (!roomId || !username) return;
 
-        const socketUrl = `ws://192.168.219.1:8000/ws/chat/${roomId}/`;
+        const socketUrl = `ws://192.168.8.101:8000/ws/chat/${roomId}/`;
         const socket = new WebSocket(socketUrl);
         socketRef.current = socket;
 

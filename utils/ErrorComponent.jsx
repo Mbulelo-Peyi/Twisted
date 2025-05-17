@@ -3,9 +3,8 @@ import { View,Text, SafeAreaView } from 'react-native';
 
 
 const ErrorComponent = ({error}) =>{
-    console.log(error)
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{justifyContent:"center",alignItems:"center"}}>
             <Text>{error.message}</Text>
         </SafeAreaView>
     )

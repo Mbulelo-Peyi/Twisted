@@ -106,7 +106,7 @@ const CommentButtons = ({ comment }) => {
             <TouchableOpacity
             disabled={likeMutation.isPending||dislikeMutation.isPending}
             onPress={() =>likeMutation.mutate()}
-            className="flex items-center space-x-1 hover:text-blue-500"
+            className="flex flex-row items-center space-x-1"
             >
                 <Text>👍</Text>
                 <Text>{commentLikesQuery.data?.like_count}</Text>
@@ -114,7 +114,7 @@ const CommentButtons = ({ comment }) => {
             <TouchableOpacity
             disabled={likeMutation.isPending||dislikeMutation.isPending}
             onPress={() =>dislikeMutation.mutate()}
-            className="flex items-center space-x-1 hover:text-red-500"
+            className="flex flex-row items-center space-x-1"
             >
                 <Text>👎</Text>
                 <Text>{commentDislikesQuery.data?.dislike_count}</Text>

@@ -50,7 +50,7 @@ const CommentReply = ({ comment }) => {
         <View className="w-10/12 shadow-md">
             <View>
             {commentReplys?.length > 0 && (
-                <View>
+                <View className="flex justify-center items-center">
                     {commentReplys?.map((commentReply) => (
                         <CommentReplyCard key={commentReply?.id} commentReply={commentReply} />
                     ))}
