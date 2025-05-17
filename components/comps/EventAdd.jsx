@@ -174,8 +174,8 @@ const EventAdd = ({ data, create, remove, update }) => {
                             />
                         )}
                         </View>
-                        {errors.birthday && touched.birthday && (
-                            <Text className="text-xs text-red-600 mt-2">{errors.birthday}</Text>
+                        {errors.date && touched.date && (
+                            <Text className="text-xs text-red-600 mt-2">{errors.date}</Text>
                         )}
                     </View>
                     {data ? (
