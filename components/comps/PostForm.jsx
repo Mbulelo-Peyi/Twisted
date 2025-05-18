@@ -21,7 +21,7 @@ const PostForm = ({ author_content_type, author_object_id }) => {
     const initialValues = {content:"",files:[]};
 
     const postMutation = useMutation({
-        mutationFn: ()=> postData(),
+        mutationFn: (variables)=> postData(variables),
         onSuccess : ()=> {
             setFile([]);
             queryClient.invalidateQueries(['feed']);
@@ -61,12 +61,13 @@ const PostForm = ({ author_content_type, author_object_id }) => {
         formData.append("author_content_type",author_content_type);
         formData.append("author_object_id",author_object_id);
         formData.append("scheduled_time",scheduled)
-        file?.forEach((file)=>{
-            'media', {
-                uri: file.files[0].uri,
-                name: file.files[0].fileName,
-                type: file.files[0].mimeType,
-            }
+        console.log(file)
+        file?.forEach((file,i)=>{
+            formData.append('media', {
+                uri: file?.uri,
+                name: file?.fileName,
+                type: file?.mimeType,
+            })
         });
         postMutation.mutate(formData);
         setSubmitting(false);

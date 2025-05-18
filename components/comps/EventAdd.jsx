@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { KeyboardAvoidingView, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { parseDateTimeForDRF } from '../../utils/dateTime';
+import { parseDateTimeForDRF, parseDateTime } from '../../utils/dateTime';
 
 
 
@@ -11,6 +11,11 @@ const EventAdd = ({ data, create, remove, update }) => {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [formattedDate, setFormattedDate] = useState('');
+    const [displayDate, setDisplayDate] = useState('');
+
+    useEffect(()=>{
+        setDisplayDate(parseDateTime(date))
+    },[formattedDate])
     const initialValues = { 
         title: data?data?.title:'', 
         description: data?data?.description:'', 
@@ -58,7 +63,7 @@ const EventAdd = ({ data, create, remove, update }) => {
         const parsedDate = parseDateTimeForDRF(currentDate);
         setFormattedDate(parsedDate || 'Invalid date');
     };
-            
+    
     const showDate = () => {
         setShowDatePicker(prev=>!prev);
     };
@@ -163,7 +168,7 @@ const EventAdd = ({ data, create, remove, update }) => {
                         <TouchableOpacity 
                         className="py-3 px-4 block w-full border text-center border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                         onPress={showDate}>
-                            <Text>{formattedDate}</Text>
+                            <Text>{data?.date?data?.date:displayDate}</Text>
                         </TouchableOpacity>
                         {showDatePicker && (
                             <DateTimePicker
