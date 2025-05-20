@@ -32,7 +32,7 @@ const CommunityHeader = ({ community_id }) => {
     return (
         <View className="relative">
             <Image
-                src={communityQuery.data?.cover_image}
+                source={{uri:communityQuery.data?.cover_image}}
                 alt="Community Cover"
                 className="w-full h-64 object-cover"
             />

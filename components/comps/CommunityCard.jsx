@@ -11,7 +11,7 @@ const CommunityCard = ({ community }) => {
                     <View>
                         <Image
                         style={{borderWidth:1,backgroundColor:'#F3F3F4'}}
-                        src={community?.logo}
+                        source={{uri:community?.logo}}
                         alt={community?.name}
                         className="h-28 w-28 bg-gray-300"
                         />

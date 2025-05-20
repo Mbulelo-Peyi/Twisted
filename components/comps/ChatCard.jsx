@@ -36,11 +36,11 @@ const ChatCard = ({ chat }) => {
             <View className="flex flex-row py-2 items-center space-x-4">
                 <TouchableOpacity onPress={()=>navigation.navigate("BottomAuth",{screen:"profile",params:{user_id:contact_id}})}>
                     <Image
-                        src={
-                            chat?.members?.filter((member)=>member?.id !== user?.id)[0]?.profile_pic?.length>0?
+                        source={{
+                            uri:chat?.members?.filter((member)=>member?.id !== user?.id)[0]?.profile_pic?.length>0?
                             chat?.members?.filter((member)=>member?.id !== user?.id)[0]?.profile_pic?.filter((pic)=>pic.is_active)[0]?.picture:
                             chat?.members?.filter((member)=>member?.id !== user?.id)[0]?.image
-                        }
+                        }}
                         alt={chat?.members?.filter((member)=>member?.id !== user?.id)[0]?.username}
                         className="w-12 h-12 rounded-full object-cover"
                     />

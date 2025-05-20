@@ -39,11 +39,11 @@ const FollowersCard = ({ relation, follow, type, community, community_id, user_i
             <View className="flex flex-row items-center space-x-4">
                 <TouchableOpacity onPress={()=>navigation.navigate("profile", {user_id:relation?.id})}>
                     <Image
-                    src={
-                        relation?.profile_pic?.length>0? 
+                    source={{
+                        uri:relation?.profile_pic?.length>0? 
                         relation?.profile_pic?.filter((pic)=>pic.is_active)[0]?.picture:
                         relation?.image
-                    }
+                    }}
                     alt={relation?.username}
                     className="w-12 h-12 rounded-full object-cover"
                     />

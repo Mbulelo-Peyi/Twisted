@@ -112,11 +112,9 @@ const Chat = () => {
       >
         <Image
           source={{
-            uri:
-              message?.sender?.profile_pic?.length > 0
-                ? message?.sender?.profile_pic?.filter((pic) => pic.is_active)[0]
-                    ?.picture
-                : message?.sender?.image,
+            uri:message?.sender?.profile_pic?.length > 0
+              ? message?.sender?.profile_pic?.filter((pic) => pic.is_active)[0]?.picture
+              : message?.sender?.image,
           }}
           className="w-10 h-10 rounded-3xl my-2"
         />

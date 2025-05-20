@@ -7,7 +7,7 @@ const ImageTag = ({ src, blurred, last, single, alt = "Image not available", cla
         <View className={`relative ${blur ? "overflow-hidden" : ""}`}>
             <Image
             className={`w-full h-auto rounded-lg ${blur ? "blur-md" : ""} ${className}`}
-            src={src}
+            source={{uri:src}}
             alt={alt}
             {...props}
             />

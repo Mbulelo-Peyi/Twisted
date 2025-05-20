@@ -8,7 +8,7 @@ const Image = ({ src, blurred, alt, fullScreen, blurEffect }) => {
             loading="lazy"
             className={`
             ${fullScreen?"w-full h-full object-contain rounded-lg":"w-full h-full object-contain rounded-lg"}${blurred ? "blur-md" : ""}`}
-            src={src}
+            source={{uri:src}}
             alt={`cover${alt}`}
             />
             {blurred &&(

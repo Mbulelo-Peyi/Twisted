@@ -125,25 +125,25 @@ const Reactions = ({ postQuery, detail }) => {
         <View className="flex flex-row items-center space-x-2">
           <TouchableOpacity
             onPress={() => setShowReactions(!showReactions)}
-            className="bg-blue-50 px-2 py-1 rounded-full h-8 flex items-center justify-center"
+            className="bg-blue-50 px-2 rounded-full h-8 flex items-center justify-center"
           >
             <Text className="text-lg">
               {reaction?.icon ? reaction?.icon : reaction}
             </Text>
           </TouchableOpacity>
-          <Text className="bg-gray-100 px-3 py-1 rounded-full text-sm">
+          <Text className="bg-gray-100 px-2 py-1 rounded-full text-sm">
             {reactionCountQuery.data?.reaction_count || 0}
           </Text>
         </View>
       )}
       {showReactions && (
-        <View className="absolute top-10 left-0 flex flex-row bg-white p-2 rounded-lg shadow z-10">
+        <View className="absolute top-10 left-0 flex flex-row bg-blue-100 items-baseline rounded-3xl shadow z-10">
           {reactionsList.map((reaction, index) => (
             <TouchableOpacity
               key={index}
               disabled={reactionMutation.isPending}
               onPress={() => reactionMutation.mutate(reaction)}
-              className="bg-inherit rounded-full px-2 py-1"
+              className="bg-inherit rounded-full px-2"
             >
               <Text className="text-lg">{reaction.icon}</Text>
             </TouchableOpacity>
